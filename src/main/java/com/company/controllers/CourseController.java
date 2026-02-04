@@ -1,6 +1,8 @@
 package com.company.controllers;
 
 import com.company.models.Course;
+import com.company.models.CourseBuilder;
+import com.company.models.Lesson;
 import com.company.repositories.CourseRepository;
 
 import java.util.List;
@@ -13,10 +15,13 @@ public class CourseController {
     }
 
     // Create new course
-    public void createCourse(String title, String description) {
-        Course c = new Course();
-        c.title = title;
-        c.description = description;
+    public void createCourse(String title, String description, List<Lesson> lessons, List<String> tags) {
+        Course c = new CourseBuilder()
+            .setTitle(title)
+            .setDescription(description)
+            .setLessons(lessons)
+            .setTags(tags)
+            .build();
         repo.create(c);
     }
 
