@@ -22,8 +22,35 @@ public class CourseServiceImpl implements CourseService {
         enrollmentRepo.enroll(userId, courseId);
     }
 
+    // Implementing BaseService methods
+
     @Override
-    public Course getCourse(int id){
+    public void create(Course course) {
+        courseRepo.create(course);
+    }
+
+    @Override
+    public boolean exists(Integer id) {
+        return courseRepo.exists(id);
+    }
+
+    @Override
+    public Course getById(Integer id) {
         return courseRepo.findById(id);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        courseRepo.delete(id);
+    }
+
+    @Override
+    public java.util.List<Course> getAll() {
+        return courseRepo.findAll();
+    }
+
+    @Override
+    public void update(Course course) {
+        courseRepo.update(course);
     }
 }
