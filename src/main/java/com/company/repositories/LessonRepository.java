@@ -10,4 +10,6 @@ public interface LessonRepository {
 
     // Get lessons by course id
     List<Lesson> findByCourseId(int courseId);
+
+    Lesson getLesson(int lessonId);
 }

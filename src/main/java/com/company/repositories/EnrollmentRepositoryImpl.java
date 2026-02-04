@@ -60,4 +60,20 @@ public class EnrollmentRepositoryImpl implements EnrollmentRepository {
 
         return courses;
     }
+    @Override
+    public boolean isEnrolled(int userId, int courseId) {
+        String sql = "SELECT 1 FROM enrollments WHERE user_id=? AND course_id=?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, courseId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("count") > 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking enrollment status", e);
+        }
+        return false;
+    }
 }

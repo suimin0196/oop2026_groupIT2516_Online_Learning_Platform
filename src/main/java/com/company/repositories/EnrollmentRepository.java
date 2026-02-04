@@ -10,4 +10,6 @@ public interface EnrollmentRepository {
 
     // Get all courses a user is enrolled in
     List<Course> findCoursesByUserId(int userId);
+    boolean isEnrolled(int userId, int courseId);
+
 }

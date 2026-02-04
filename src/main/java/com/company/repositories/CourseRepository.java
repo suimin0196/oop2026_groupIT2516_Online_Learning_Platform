@@ -14,5 +14,7 @@ public interface CourseRepository {
     Course findById(int id);
     // Get course description by id
     String getDescriptionById(int id);
+    
+    boolean isArchived(int id);
 
 }

@@ -56,4 +56,26 @@ public class LessonRepositoryImpl implements LessonRepository {
         }
         return lessons;
     }
+    @Override
+    public Lesson getLesson(int lessonId) {
+        String sql = "SELECT * FROM lessons WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, lessonId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Lesson l = new Lesson();
+                l.id = rs.getInt("id");
+                l.courseId = rs.getInt("course_id");
+                l.title = rs.getString("title");
+                return l;
+            } else {
+                return null; // Or throw an exception if preferred
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching lesson", e);
+        }
+    }
 }

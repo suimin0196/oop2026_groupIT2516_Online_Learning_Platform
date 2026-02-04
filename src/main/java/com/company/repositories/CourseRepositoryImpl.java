@@ -88,5 +88,24 @@ public class CourseRepositoryImpl implements CourseRepository {
             throw new RuntimeException("Error retrieving course description", e);
         }
     }
+    @Override
+    public boolean isArchived(int id) {
+        String sql = "SELECT archived FROM courses WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBoolean("archived");
+            }
+
+            throw new RuntimeException("Course not found");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking if course is archived", e);
+        }
+    }
 
 }
