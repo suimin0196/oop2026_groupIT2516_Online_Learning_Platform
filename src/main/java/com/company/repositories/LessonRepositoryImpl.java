@@ -57,7 +57,7 @@ public class LessonRepositoryImpl implements LessonRepository {
         return lessons;
     }
     @Override
-    public Lesson getLesson(int lessonId) {
+    public Lesson findById(Integer lessonId) {
         String sql = "SELECT * FROM lessons WHERE id = ?";
         try (Connection con = db.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -77,5 +77,66 @@ public class LessonRepositoryImpl implements LessonRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching lesson", e);
         }
+    }
+
+    // Implement BaseRepository methods
+
+    @Override
+    public boolean exists(Integer id) {
+        String sql = "SELECT 1 FROM lessons WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking if lesson exists", e);
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        String sql = "DELETE FROM lessons WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting lesson", e);
+        }
+    }
+
+    @Override
+    public void update(Lesson lesson) {
+        String sql = "UPDATE lessons SET course_id = ?, title = ? WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, lesson.courseId);
+            ps.setString(2, lesson.title);
+            ps.setInt(3, lesson.id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating lesson", e);
+        }
+    }
+
+    @Override
+    public List<Lesson> findAll() {
+        List<Lesson> lessons = new ArrayList<>();
+        String sql = "SELECT * FROM lessons";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Lesson l = new Lesson();
+                l.id = rs.getInt("id");
+                l.courseId = rs.getInt("course_id");
+                l.title = rs.getString("title");
+                lessons.add(l);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching all lessons", e);
+        }
+        return lessons;
     }
 }

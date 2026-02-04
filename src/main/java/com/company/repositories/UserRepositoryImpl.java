@@ -56,7 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     // Find user by id
     @Override
-    public User findById(int id) {
+    public User findById(Integer id) {
         String sql = "SELECT * FROM users WHERE id = ?";
 
         try (Connection con = db.getConnection();
@@ -76,6 +76,46 @@ public class UserRepositoryImpl implements UserRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException("Error finding user", e);
+        }
+    }
+
+    // Implementation for BaseRepository<User, Integer>
+    @Override
+    public boolean exists(Integer id) {
+        String sql = "SELECT 1 FROM users WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking if user exists", e);
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting user", e);
+        }
+    }
+
+    @Override
+    public void update(User user) {
+        String sql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, user.name);
+            ps.setString(2, user.email);
+            ps.setInt(3, user.id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating user", e);
         }
     }
 }

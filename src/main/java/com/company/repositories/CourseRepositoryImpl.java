@@ -48,7 +48,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public Course findById(int id) {
+    public Course findById(Integer id) {
         String sql = "SELECT * FROM courses WHERE id = ?";
         try (Connection con = db.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -64,6 +64,51 @@ public class CourseRepositoryImpl implements CourseRepository {
             throw new RuntimeException("Course not found");
         } catch (SQLException e) {
             throw new RuntimeException("Error finding course", e);
+        }
+    }
+
+    @Override
+    public boolean exists(Integer id) {
+        String sql = "SELECT 1 FROM courses WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking if course exists", e);
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        String sql = "DELETE FROM courses WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new RuntimeException("Course not found for deletion");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting course", e);
+        }
+    }
+
+    @Override
+    public void update(Course course) {
+        String sql = "UPDATE courses SET title = ?, description = ? WHERE id = ?";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, course.title);
+            ps.setString(2, course.description);
+            ps.setInt(3, course.id);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new RuntimeException("Course not found for update");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating course", e);
         }
     }
     // Retrieve only course description
