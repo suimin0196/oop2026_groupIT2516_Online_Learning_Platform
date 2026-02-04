@@ -8,7 +8,7 @@ public class PostgresDB implements IDB {
     // Database credentials
     private final String url = "jdbc:postgresql://localhost:5432/online_learning";
     private final String user = "DB_User";
-    private final String password = "DB_Password";
+    private final String password = System.getenv("DB_PASSWORD");
 
     private Connection connection;
     // Create and return connection
