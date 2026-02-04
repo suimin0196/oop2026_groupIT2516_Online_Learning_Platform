@@ -1,16 +1,8 @@
 package com.company.repositories;
 
 import com.company.models.User;
-import java.util.List;
 
-public interface UserRepository {
-
-    // Create new user
-    void create(User user);
-
-    // Get all users
-    List<User> findAll();
-
-    // Find user by id
-    User findById(int id);
+// UserRepository extends BaseRepository for common CRUD operations
+public interface UserRepository extends BaseRepository<User, Integer> {
+    // User-specific methods can be added here if needed
 }

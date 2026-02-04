@@ -3,13 +3,9 @@ package com.company.repositories;
 import com.company.models.Lesson;
 import java.util.List;
 
-public interface LessonRepository {
-
-    // Create lesson
-    void create(Lesson lesson);
-
+// LessonRepository extends BaseRepository for common CRUD operations
+public interface LessonRepository extends BaseRepository<Lesson, Integer> {
+    
     // Get lessons by course id
     List<Lesson> findByCourseId(int courseId);
-
-    Lesson getLesson(int lessonId);
 }

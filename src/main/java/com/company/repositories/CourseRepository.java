@@ -1,20 +1,13 @@
 package com.company.repositories;
 
 import com.company.models.Course;
-import java.util.List;
 
-public interface CourseRepository {
-    // Save new course
-    void create(Course course);
-
-    // List all courses
-    List<Course> findAll();
-
-    // Find course by id
-    Course findById(int id);
+// CourseRepository extends BaseRepository for common CRUD operations
+public interface CourseRepository extends BaseRepository<Course, Integer> {
+    
     // Get course description by id
     String getDescriptionById(int id);
     
+    // Check if course is archived
     boolean isArchived(int id);
-
 }
