@@ -1,2 +1,5 @@
 config.properties
 target/
+target/classes/
+target/classes/com/
+target/classes/com/company/
