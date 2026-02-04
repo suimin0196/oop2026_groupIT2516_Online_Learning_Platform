@@ -1,5 +1,4 @@
 package com.company.repositories;
-
 import java.util.List;
 
 // Generic base repository interface with common CRUD operations
