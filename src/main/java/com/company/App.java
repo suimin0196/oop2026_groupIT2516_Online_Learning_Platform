@@ -98,16 +98,16 @@ public class App {
                 case 4:
                     User u = new User();
                     System.out.print("Name: ");
-                    u.name = sc.nextLine();
+                    u.setName(sc.nextLine());
                     System.out.print("Email: ");
-                    u.email = sc.nextLine();
+                    u.setEmail(sc.nextLine());
                     userRepo.create(u);
                     break;
 
                 case 5:
                     userRepo.findAll()
-                            .forEach(user ->
-                                    System.out.println(user.id + " " + user.name));
+                        .forEach(user ->
+                            System.out.println(user.getId() + " " + user.getName()));
                     break;
 
                 case 6:
