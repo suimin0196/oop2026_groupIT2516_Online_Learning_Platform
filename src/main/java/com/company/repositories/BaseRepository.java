@@ -22,4 +22,4 @@ public interface BaseRepository<T, ID> {
     
     // Check if entity exists
     boolean exists(ID id);
-}
+} 
