@@ -9,11 +9,19 @@ public class ProgressRepositoryImpl implements ProgressRepository {
     public ProgressRepositoryImpl(IDB db){this.db=db;}
 
     public void markCompleted(int userId,int lessonId){
-        try(Connection con=db.getConnection()){
-            PreparedStatement ps=con.prepareStatement(
-              "INSERT INTO progress(user_id,lesson_id,completed) VALUES(?,?,true)");
-            ps.setInt(1,userId); ps.setInt(2,lessonId); ps.execute();
-        }catch(Exception e){e.printStackTrace();}
+        String sql = "INSERT INTO progress(user_id, lesson_id, course_id, completed) VALUES (?, ?, (SELECT course_id FROM lessons WHERE id = ?), true)";
+        try (Connection con = db.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, lessonId);
+            ps.setInt(3, lessonId);
+            int affected = ps.executeUpdate();
+            if (affected == 0) {
+                throw new RuntimeException("Failed to mark progress: lesson not found");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error marking progress", e);
+        }
     }
 
     public int getProgress(int userId,int courseId){

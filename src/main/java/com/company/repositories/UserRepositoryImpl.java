@@ -22,8 +22,8 @@ public class UserRepositoryImpl implements UserRepository {
         try (Connection con = db.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, user.name);
-            ps.setString(2, user.email);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
             ps.execute();
 
         } catch (SQLException e) {
@@ -43,9 +43,9 @@ public class UserRepositoryImpl implements UserRepository {
 
             while (rs.next()) {
                 User u = new User();
-                u.id = rs.getInt("id");
-                u.name = rs.getString("name");
-                u.email = rs.getString("email");
+                u.setId(rs.getInt("id"));
+                u.setName(rs.getString("name"));
+                u.setEmail(rs.getString("email"));
                 users.add(u);
             }
         } catch (SQLException e) {
@@ -67,9 +67,9 @@ public class UserRepositoryImpl implements UserRepository {
 
             if (rs.next()) {
                 User u = new User();
-                u.id = rs.getInt("id");
-                u.name = rs.getString("name");
-                u.email = rs.getString("email");
+                u.setId(rs.getInt("id"));
+                u.setName(rs.getString("name"));
+                u.setEmail(rs.getString("email"));
                 return u;
             }
             throw new RuntimeException("User not found");
@@ -110,9 +110,9 @@ public class UserRepositoryImpl implements UserRepository {
         String sql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
         try (Connection con = db.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, user.name);
-            ps.setString(2, user.email);
-            ps.setInt(3, user.id);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setInt(3, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating user", e);
